@@ -22,6 +22,10 @@ camera_matrix = np.array([
 # Distortion coefficients (all zeros : check ros2 topic echo /camera/camera_info)
 dist_coeffs = np.zeros(5)
 
+# Variable to save the id of the last seen marker
+global last_id
+last_id = 0
+
 class VisionNode(Node):
     def __init__(self):
         super().__init__('vision_node')
@@ -50,10 +54,12 @@ class VisionNode(Node):
     def listener_callback(self, msg):
         # Convert ROS Image message to OpenCV image
         self.image = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
-        self.get_logger().info(f"Received an image of size: {self.image.shape}")
+        #self.get_logger().info(f"Received an image of size: {self.image.shape}")
         #self.get_logger().info('Image converted to OpenCV format') 
         
     def aruco_callback(self, msg):
+        global last_id
+    	
         # Get detected marker IDs and poses
         detected_marker_ids = msg.marker_ids
         # Get detected marker poses
@@ -82,8 +88,11 @@ class VisionNode(Node):
             cv2.circle(current_frame, center, radius, color, thickness)
 
             # Publish the image with the detected ArUco marker
-            self.detected_marker_image_pub.publish(self.bridge.cv2_to_imgmsg(current_frame, encoding="bgr8"))
-            self.get_logger().info(f"Published an image with detected marker at: {center}")
+            # check if the image with this marker has already been published
+            if last_id != marker_id:
+                self.detected_marker_image_pub.publish(self.bridge.cv2_to_imgmsg(current_frame, encoding="bgr8"))
+                self.get_logger().info(f"Published an image with detected marker at: {center}")
+                last_id = marker_id
 
             # Display the result image
             cv2.imshow('Detected ArUco Marker', current_frame)
