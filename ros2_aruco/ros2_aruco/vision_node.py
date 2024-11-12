@@ -12,6 +12,8 @@ from ros2_aruco_interfaces.msg import ArucoMarkers
 height = 480
 width = 640
 
+seen_ids = []
+
 # Intrinsic camera matrix: used for mapping 3D points to 2D image plane
 camera_matrix = np.array([
     [355.39477962339123, 0.0, 320.5],
@@ -35,6 +37,7 @@ class VisionNode(Node):
         self.declare_parameter("detected_marker_image_topic", "aruco_markers/detected_marker_image")
         self.detected_marker_image_pub = self.create_publisher(Image, self.get_parameter("detected_marker_image_topic").value, qos_profile=qos_profile_sensor_data)
         self.get_logger().info("Created publisher to /aruco_markers/detected_marker_image")
+        cv2.namedWindow('Detected ArUco Marker')
 
         # Subscriber to ArucoMarkers topic
         self.id_retriever = self.create_subscription(ArucoMarkers, 'aruco_markers', self.aruco_callback, qos_profile=qos_profile_sensor_data)
@@ -58,7 +61,6 @@ class VisionNode(Node):
         #self.get_logger().info('Image converted to OpenCV format') 
         
     def aruco_callback(self, msg):
-        global last_id
     	
         # Get detected marker IDs and poses
         detected_marker_ids = msg.marker_ids
@@ -88,11 +90,12 @@ class VisionNode(Node):
 
             # Publish the image with the detected ArUco marker
             # check if the image with this marker has already been published
-            if last_id != marker_id:
+            if marker_id not in seen_ids:
                 self.detected_marker_image_pub.publish(self.bridge.cv2_to_imgmsg(current_frame, encoding="bgr8"))
-                self.get_logger().info(f"Published an image with detected marker at: {center}")
-                last_id = marker_id
+                self.get_logger().info(f"Published an image with detected marker at: {center} with id {marker_id}")
+                seen_ids.append(marker_id)
                 # Display the result image
+
                 cv2.imshow('Detected ArUco Marker', current_frame)
                 cv2.waitKey(1)
 
