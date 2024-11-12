@@ -38,6 +38,7 @@ class VisionNode(Node):
         self.detected_marker_image_pub = self.create_publisher(Image, self.get_parameter("detected_marker_image_topic").value, qos_profile=qos_profile_sensor_data)
         self.get_logger().info("Created publisher to /aruco_markers/detected_marker_image")
         cv2.namedWindow('Detected ArUco Marker')
+        # cv2.waitKey(6)
 
         # Subscriber to ArucoMarkers topic
         self.id_retriever = self.create_subscription(ArucoMarkers, 'aruco_markers', self.aruco_callback, qos_profile=qos_profile_sensor_data)
@@ -69,7 +70,7 @@ class VisionNode(Node):
 
         color = (0, 255, 0)  # Green
         thickness = 2
-        radius = 20
+        radius = 25
 
         current_frame = self.image.copy()
 
@@ -97,7 +98,8 @@ class VisionNode(Node):
                 # Display the result image
 
                 cv2.imshow('Detected ArUco Marker', current_frame)
-                cv2.waitKey(1)
+                cv2.waitKey(7)
+                
 
 def main():
     rclpy.init()
