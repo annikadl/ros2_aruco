@@ -14,6 +14,9 @@ width = 640
 
 seen_ids = []
 
+global first_sight
+first_sight = False
+
 # Intrinsic camera matrix: used for mapping 3D points to 2D image plane
 camera_matrix = np.array([
     [355.39477962339123, 0.0, 320.5],
@@ -62,7 +65,8 @@ class VisionNode(Node):
         #self.get_logger().info('Image converted to OpenCV format') 
         
     def aruco_callback(self, msg):
-    	
+        global first_sight
+
         # Get detected marker IDs and poses
         detected_marker_ids = msg.marker_ids
         # Get detected marker poses
@@ -91,14 +95,38 @@ class VisionNode(Node):
 
             # Publish the image with the detected ArUco marker
             # check if the image with this marker has already been published
-            if marker_id not in seen_ids:
-                self.detected_marker_image_pub.publish(self.bridge.cv2_to_imgmsg(current_frame, encoding="bgr8"))
-                self.get_logger().info(f"Published an image with detected marker at: {center} with id {marker_id}")
-                seen_ids.append(marker_id)
-                # Display the result image
+            
+            if not first_sight:
+                if marker_id not in seen_ids:
+                    self.detected_marker_image_pub.publish(self.bridge.cv2_to_imgmsg(current_frame, encoding="bgr8"))
+                    self.get_logger().info(f"Published an image with detected marker at: {center} with id {marker_id}")
+                    seen_ids.append(marker_id)
+                    # Display the result image
 
-                cv2.imshow('Detected ArUco Marker', current_frame)
-                cv2.waitKey(7)
+                    cv2.imshow('Detected ArUco Marker', current_frame)
+                    cv2.waitKey(7)
+
+                    if len(seen_ids) == 5:
+                        first_sight = True
+                        break
+
+            if first_sight:
+                seen_ids.sort()
+                for i in range(5):
+                    if marker_id == seen_ids[i]:
+                        seen_ids.pop(i)
+                        self.get_logger().info(f"Published an image with detected marker id {marker_id}")
+                        cv2.imshow('Detected ArUco Marker', current_frame)
+                        cv2.waitKey(7)
+
+                    if seen_ids == []:
+                        self.get_logger().info(f"All markers have been detected and sorted")
+                        break    
+
+                
+
+
+
                 
 
 def main():
