@@ -108,20 +108,32 @@ class VisionNode(Node):
 
                     if len(seen_ids) == 5:
                         first_sight = True
+                        self.get_logger().info(f"Markers detected: {seen_ids}")
                         break
 
             if first_sight:
                 seen_ids.sort()
-                for i in range(5):
-                    if marker_id == seen_ids[i]:
-                        seen_ids.pop(i)
+                self.get_logger().info(f"Markers sorted: {seen_ids}")
+                
+                if seen_ids != []:
+                    self.get_logger().info(f"The next marker is: {seen_ids[i]}")
+
+                    if seen_ids[0] == marker_id:
+                        seen_ids.pop(0)
+                        self.get_logger().info(f"I'm looking for marker {seen_ids[0]} but I see marker {marker_id}")
                         self.get_logger().info(f"Published an image with detected marker id {marker_id}")
                         cv2.imshow('Detected ArUco Marker', current_frame)
                         cv2.waitKey(7)
 
-                    if seen_ids == []:
-                        self.get_logger().info(f"All markers have been detected and sorted")
-                        break    
+                    else:
+                        self.get_logger().info(f"I'm looking for marker {seen_ids[0]} but I see {marker_id} ")
+                        pass    
+
+
+                else :
+                    self.get_logger().info("All markers detected")
+                    pass        
+
 
                 
 
