@@ -22,8 +22,7 @@ setup(
         'console_scripts': [
             'aruco_node = ros2_aruco.aruco_node:main',
             'aruco_generate_marker = ros2_aruco.aruco_generate_marker:main',
-            'vision_node = ros2_aruco.vision_node:main',
-            'custom_image_node = ros2_aruco.custom_image_node:main'
+            'vision_node = ros2_aruco.vision_node:main'
         ],
     },
 )

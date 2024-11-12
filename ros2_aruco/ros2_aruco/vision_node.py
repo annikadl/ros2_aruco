@@ -72,7 +72,6 @@ class VisionNode(Node):
         current_frame = self.image.copy()
 
         for i, marker_id in enumerate(detected_marker_ids):
-            #Check if marker ID is valid
             if marker_id > 40:
                 continue
 
@@ -93,10 +92,9 @@ class VisionNode(Node):
                 self.detected_marker_image_pub.publish(self.bridge.cv2_to_imgmsg(current_frame, encoding="bgr8"))
                 self.get_logger().info(f"Published an image with detected marker at: {center}")
                 last_id = marker_id
-
-            # Display the result image
-            cv2.imshow('Detected ArUco Marker', current_frame)
-            cv2.waitKey(1)
+                # Display the result image
+                cv2.imshow('Detected ArUco Marker', current_frame)
+                cv2.waitKey(1)
 
 def main():
     rclpy.init()
