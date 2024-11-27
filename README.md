@@ -19,7 +19,11 @@ The assignment required to:
 Note that to accomplish these tasks, the behaviour of this `vision_node` must be coupled with the control routine that can be found at this link "".
 
 ## Already existing nodes
-The  
+The implemented routine for detecting the markers and sorting them relies on the behaviour of the already implemented `aruco_node.py`, that works as follows:
+
+
+
+## 
 
   
 
