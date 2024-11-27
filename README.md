@@ -19,7 +19,22 @@ The assignment required to:
 Note that to accomplish these tasks, the behaviour of this `vision_node` must be coupled with the control routine that can be found at this link "".
 
 ## Already existing nodes
-The implemented routine for detecting the markers and sorting them relies on the behaviour of the already implemented `aruco_node.py`, that works as follows:
+The implemented routine for detecting the markers and sorting them relies on the behaviour of the already implemented `aruco_node.py`, which locates Aruco AR markers in images and publishes their IDs and poses.
+
+Subscriptions:
+* `/camera/image_raw` (`sensor_msgs.msg.Image`)
+* `/camera/camera_info` (`sensor_msgs.msg.CameraInfo`)
+
+Published Topics:
+* `/aruco_poses` (`geometry_msgs.msg.PoseArray`) - Poses of all detected markers (suitable for rviz visualization)
+* `/aruco_markers` (`ros2_aruco_interfaces.msg.ArucoMarkers`) - Provides an array of all poses along with the corresponding marker id
+
+Parameters:
+* `marker_size` - size of the markers in meters (default .0625)
+* `aruco_dictionary_id` - dictionary that was used to generate markers (default `DICT_5X5_250`)
+* `image_topic` - image topic to subscribe to (default `/camera/image_raw`)
+* `camera_info_topic` - Camera info topic to subscribe to (default `/camera/camera_info`)
+* `camera_frame` - Camera optical frame to use (default to the frame id provided by the camera info message.)
 
 
 
