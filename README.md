@@ -27,11 +27,11 @@ The implemented routine for detecting the markers and sorting them relies on the
 |                      | `/camera/camera_info`         | `sensor_msgs.msg.CameraInfo`                                                                |
 | **Published Topics** | `/aruco_poses`                | `geometry_msgs.msg.PoseArray` - Poses of all detected markers (suitable for rviz visualization) |
 |                      | `/aruco_markers`              | `ros2_aruco_interfaces.msg.ArucoMarkers` - Array of all poses with corresponding marker ID  |
-| **Parameters**       | `marker_size`                 | Size of the markers in meters (default: `.0625`)                                            |
-|                      | `aruco_dictionary_id`         | Dictionary used to generate markers (default: `DICT_5X5_250`)                               |
-|                      | `image_topic`                 | Image topic to subscribe to (default: `/camera/image_raw`)                                  |
-|                      | `camera_info_topic`           | Camera info topic to subscribe to (default: `/camera/camera_info`)                         |
-|                      | `camera_frame`                | Camera optical frame to use (default: Frame ID from the camera info message)               |
+| **Parameters**       | `marker_size`                 | Size of the markers in meters                                          |
+|                      | `aruco_dictionary_id`         | Dictionary used to generate markers                            |
+|                      | `image_topic`                 | Image topic to subscribe to (`/camera/image_raw`)                                  |
+|                      | `camera_info_topic`           | Camera info topic to subscribe to (`/camera/camera_info`)                         |
+|                      | `camera_frame`                | Camera optical frame to use            |
 
 
 
