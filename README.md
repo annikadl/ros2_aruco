@@ -18,6 +18,15 @@ The assignment required to:
 
 Note that to accomplish these tasks, the behaviour of this `vision_node` must be coupled with the control routine that can be found at this link "".
 
+## How to run it
+### Prerequisites
+This package depends on a recent version of OpenCV python bindings:
+
+```
+pip install opencv-contrib-python # or pip3
+```
+### Commands
+
 ## Already existing nodes
 The implemented routine for detecting the markers and sorting them relies on the behaviour of the already implemented `aruco_node.py`, which locates Aruco AR markers in images and publishes their IDs and poses.
 
@@ -53,16 +62,10 @@ At the very beginning the node sets up a publisher for annotated images and subs
 After the initialization process, the implemented logic follows these steps.
 1. The robot starts rotating. During the rotation, it sees the Aruco Markers previously placed in the environment. The IDs of the markers are retrieved from the information of the camera and properly stored in a list of markers seen for the first time. Every time the robot sees a new marker, it suddenly publishes a picture of them on the custom topic  `detected_marker_image_topic`.
 2. The robot continues until all the five markers have been detected at least once.
-3. Once the markers have been seen at least one time, the list containing the IDs is sorted to plan how to publish their image in the correct order. To switch to this modality, in which the robot looks for a desired marker, the boolean flag `first_sight` is used.
-4. and the robot looks for them one at a time;
-
-5. 
-- when the desired marker is found, a frame containing it is published one more time;
-- once the sorted list is over, i.e. all the markers' images have been published again in the correct order, the program ends. 
+3. Once the markers have been seen at least one time, the list containing the IDs is sorted to plan how to publish their image in the correct order. To switch to this modality, in which the robot looks for a desired marker at a time, the boolean flag `first_sight` is used.
+4. When the desired marker is found, a frame containing it is published one more time on the custom topic `detected_marker_image_topic`.
+5. Once the sorted list is over, all the markers' images have been published again in the correct order, so the program ends. 
  
-
-
-
 
 
 
