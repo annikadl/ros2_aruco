@@ -1,11 +1,25 @@
 # Ros2_aruco
 
-This repository contains the Vision Node for the first assignment of the Experimental Robotics Course at the Robotics Engineering Master Course of Genoa.
+This repository contains the Vision Package for the first assignment of the Experimental Robotics Laboratory Course at the Robotics Engineering Master Course of Genoa.
 The authors are:
 - Valentina Condorelli, ;
 - Annika Delucchi, 49759849;
 - Ramona Ferrari, ;
 - Daniele Rialdi, .
+
+The package was initially forked by the Professor's repository, to which we added the file `vision_node.py` at the path `ros2_aruco/ros2_aruco/`.
+
+## Assignment
+The assignment required to:
+- spawn the robot in Gazebo, surrounded by 5 Aruco markers arranged in a circle;
+- implement a routine that starts finding the marker with the lowest ID, and then finds all markers in order;
+- each time a marker is found, a new image is published on a custom topic with a circle around the marker found;
+- implement the same behaviour with two different nodes: in the first one, the whole robot moves; in the second one, you find the markers by only moving the camera.
+
+Note that to accomplish these tasks, the behaviour of this `vision_node` must be coupled with the control routine that can be found at this link "".
+
+## Already existing nodes
+The  
 
   
 
