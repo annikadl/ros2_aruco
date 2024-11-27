@@ -35,14 +35,12 @@ This node, integrated with aruco_node.py, is designed to detect a sequence of Ar
 | **Parameters**     | `detected_marker_image_topic`           | -                                       | Specifies the custom topic to publish the detected marker image (default: `aruco_markers/detected_marker_image`). |
 
 
-
-Key Behavior
-Initialization:
-
+### Behavior
+#### Initialization
 Sets up a publisher for annotated images and subscribers for the raw camera feed and ArUco marker detections.
 Initializes a CvBridge for ROS-OpenCV conversions and an image container for processing frames.
-Processing Logic:
 
+Processing Logic:
 Image Callback: Updates the internal image container with the latest camera frame.
 Aruco Callback:
 Projects 3D marker positions onto the 2D image plane using the camera’s intrinsic parameters.
@@ -60,8 +58,6 @@ This node is ideal for tasks requiring structured recognition and ordered proces
 Sequential marker-based navigation.
 Visual tracking and marker-specific actions.
 Marker identification and logging for robotics applications.
-Authors
-Valentina Condorelli, Annika Delucchi, Ramona Ferrari, Daniele Rialdi
 
   
 
