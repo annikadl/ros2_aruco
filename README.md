@@ -1,5 +1,21 @@
-# ros2_aruco
+# Ros2_aruco
 
+This repository contains the Vision Node for the first assignment of the Experimental Robotics Course at the Robotics Engineering Master Course of Genoa.
+The authors are:
+- Valentina Condorelli, ;
+- Annika Delucchi, 49759849;
+- Ramona Ferrari, ;
+- Daniele Rialdi, .
+
+  
+
+
+
+
+
+
+
+# old readme
 ROS2 Wrapper for OpenCV Aruco Marker Tracking
 
 This package depends on a recent version of OpenCV python bindings:
