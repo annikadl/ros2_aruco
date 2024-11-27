@@ -23,7 +23,45 @@ The implemented routine for detecting the markers and sorting them relies on the
 
 
 
-## 
+## vision_node.py
+This node, integrated with aruco_node.py, is designed to detect a sequence of ArUco markers in a specific order and manage their visualization and publication. It retrieves raw camera images and ArUco marker detections from other topics and processes them to track and display the detected markers.
+
+### Node Functionality
+| **Type**          | **Topic**                                | **Message Type**                       | **Description**                                                                 |
+|--------------------|------------------------------------------|-----------------------------------------|---------------------------------------------------------------------------------|
+| **Subscriptions**  | `/camera/image_raw`                     | `sensor_msgs/Image`                    | Captures the raw image feed from the camera.                                   |
+|                    | `/aruco_markers`                        | `ros2_aruco_interfaces/ArucoMarkers`   | Receives the detected ArUco markers, including their IDs and poses, from `aruco_node.py`. |
+| **Publications**   | `/aruco_markers/detected_marker_image`   | `sensor_msgs/Image`                    | Publishes an annotated image highlighting the detected ArUco marker to a custom topic for visualization. |
+| **Parameters**     | `detected_marker_image_topic`           | -                                       | Specifies the custom topic to publish the detected marker image (default: `aruco_markers/detected_marker_image`). |
+
+
+
+Key Behavior
+Initialization:
+
+Sets up a publisher for annotated images and subscribers for the raw camera feed and ArUco marker detections.
+Initializes a CvBridge for ROS-OpenCV conversions and an image container for processing frames.
+Processing Logic:
+
+Image Callback: Updates the internal image container with the latest camera frame.
+Aruco Callback:
+Projects 3D marker positions onto the 2D image plane using the camera’s intrinsic parameters.
+Highlights detected markers on the current frame with green circles.
+Tracks the IDs of markers already seen and ensures each is detected and published once.
+After all markers are detected, reorders and processes them sequentially by ID for further display or action.
+Tracking and Visualization:
+
+Initially tracks up to five markers, ensuring each is detected once in any order.
+Once all markers are detected, it processes them in ascending order of their IDs for structured visualization.
+Displays the processed images in a window and publishes them to the specified topic.
+Application
+This node is ideal for tasks requiring structured recognition and ordered processing of ArUco markers, such as:
+
+Sequential marker-based navigation.
+Visual tracking and marker-specific actions.
+Marker identification and logging for robotics applications.
+Authors
+Valentina Condorelli, Annika Delucchi, Ramona Ferrari, Daniele Rialdi
 
   
 
