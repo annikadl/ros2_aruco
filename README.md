@@ -50,9 +50,13 @@ This node, integrated with aruco_node.py, is designed to detect a sequence of Ar
 ### Behavior
 At the very beginning the node sets up a publisher for annotated images and subscribers for the raw camera feed and ArUco marker detections;then it initializes a CvBridge for ROS-OpenCV conversions and an image container for processing frames.
 
-After the initialization process, the implemented logic is the following:
-- the robot rotates, storing the ID of the seen markers and publishing their image as soon as it sees them for the first time;
-- once the markers have been seen at least one time, the list containing the IDs is sorted and the robot looks for them one at a time;
+After the initialization process, the implemented logic follows these steps.
+1. The robot starts rotating. During the rotation, it sees the Aruco Markers previously placed in the environment. The IDs of the markers are retrieved from the information of the camera and properly stored in a list of markers seen for the first time. Every time the robot sees a new marker, it suddenly publishes a picture of them on the custom topic  `detected_marker_image_topic`.
+2. The robot continues until all the five markers have been detected at least once.
+3. Once the markers have been seen at least one time, the list containing the IDs is sorted to plan how to publish their image in the correct order. To switch to this modality, in which the robot looks for a desired marker, the boolean flag `first_sight` is used.
+4. and the robot looks for them one at a time;
+
+5. 
 - when the desired marker is found, a frame containing it is published one more time;
 - once the sorted list is over, i.e. all the markers' images have been published again in the correct order, the program ends. 
  
