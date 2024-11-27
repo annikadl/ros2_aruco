@@ -8,14 +8,27 @@ from sensor_msgs.msg import CameraInfo, Image
 from geometry_msgs.msg import PoseArray, Pose
 from ros2_aruco_interfaces.msg import ArucoMarkers
 
+
+"""
+ This node integrated with aruco_node.py implements a routine to detect a sequence of ArUco markers in a specific order.
+ 
+ Subscriptions:
+    - /camera/image_raw (sensor_msgs/Image): the raw image is retrieved from the camera;
+    - /aruco_markers (ros2_aruco_interfaces/ArucoMarkers): the detected ArUco markers list is retrieved from the aruco_node.py.
+
+ Published Topics:
+    - /aruco_markers/detected_marker_image (sensor_msgs/Image): The image with the detected ArUco marker is published to the custom topic.
+
+ Parameters:
+    - detected_marker_image_topic (str): custom topic to publish the detected marker image   
+
+
+ Authors: Valentina Condorelli, Annika Delucchi, Ramona Ferrari, Daniele Rialdi     
+"""
+
 # Camera params
 height = 480
 width = 640
-
-seen_ids = []
-
-global first_sight
-first_sight = False
 
 # Intrinsic camera matrix: used for mapping 3D points to 2D image plane
 camera_matrix = np.array([
@@ -26,6 +39,14 @@ camera_matrix = np.array([
 
 # Distortion coefficients (all zeros : check ros2 topic echo /camera/camera_info)
 dist_coeffs = np.zeros(5)
+
+
+# List to store the ids of the seen markers
+seen_ids = []
+
+# Variable to check if the marker has been seen before
+global first_sight
+first_sight = False
 
 # Variable to save the id of the last seen marker
 global last_id
@@ -72,6 +93,7 @@ class VisionNode(Node):
         # Get detected marker poses
         detected_marker_poses = msg.poses
 
+        # Define the circle parameters
         color = (0, 255, 0)  # Green
         thickness = 2
         radius = 25
@@ -79,6 +101,7 @@ class VisionNode(Node):
         current_frame = self.image.copy()
 
         for i, marker_id in enumerate(detected_marker_ids):
+            # Skip larger markers that are not part of the sequence
             if marker_id > 40:
                 continue
 
@@ -94,30 +117,38 @@ class VisionNode(Node):
             cv2.circle(current_frame, center, radius, color, thickness)
 
             # Publish the image with the detected ArUco marker
-            # check if the image with this marker has already been published
+            # but first check if the image with this marker has already been published
             
+            # if I haven't seen all the five markers yet, when I find a new one I publish the correspondign image
             if not first_sight:
                 if marker_id not in seen_ids:
                     self.detected_marker_image_pub.publish(self.bridge.cv2_to_imgmsg(current_frame, encoding="bgr8"))
                     self.get_logger().info(f"Published an image with detected marker at: {center} with id {marker_id}")
-                    seen_ids.append(marker_id)
-                    # Display the result image
 
+                    # Store the id of the seen marker
+                    seen_ids.append(marker_id)
+
+                    # Display the result image
                     cv2.imshow('Detected ArUco Marker', current_frame)
                     cv2.waitKey(7)
 
+                    # The five markers have been seen all once
                     if len(seen_ids) == 5:
                         first_sight = True
                         self.get_logger().info(f"Markers detected: {seen_ids}")
                         break
 
+            # When I have seen all the five markers, I show their images again but sorted by their id
             if first_sight:
+                # sort the list of seen markers
                 seen_ids.sort()
                 self.get_logger().info(f"Markers sorted: {seen_ids}")
                 
+                # if seen_ids is not empty, retrieve the next marker id 
                 if seen_ids != []:
                     self.get_logger().info(f"The next marker is: {seen_ids[i]}")
 
+                    # if the next marker id is the one I was looking for, remove it from the list and publish the image
                     if seen_ids[0] == marker_id:
                         seen_ids.pop(0)
                         self.get_logger().info(f"I'm looking for marker {seen_ids[0]} but I see marker {marker_id}")
@@ -125,22 +156,19 @@ class VisionNode(Node):
                         cv2.imshow('Detected ArUco Marker', current_frame)
                         cv2.waitKey(7)
 
+                    # else if the marker id is not the one I was looking for, I don't publish the image and continue
                     else:
                         self.get_logger().info(f"I'm looking for marker {seen_ids[0]} but I see {marker_id} ")
                         pass    
 
-
+                
+                # if all the markers have been seen sorted, exit
                 else :
                     self.get_logger().info("All markers detected")
-                    pass        
+                    quit()        
 
 
                 
-
-
-
-                
-
 def main():
     rclpy.init()
     node = VisionNode()
