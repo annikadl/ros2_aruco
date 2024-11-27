@@ -21,20 +21,17 @@ Note that to accomplish these tasks, the behaviour of this `vision_node` must be
 ## Already existing nodes
 The implemented routine for detecting the markers and sorting them relies on the behaviour of the already implemented `aruco_node.py`, which locates Aruco AR markers in images and publishes their IDs and poses.
 
-Subscriptions:
-* `/camera/image_raw` (`sensor_msgs.msg.Image`)
-* `/camera/camera_info` (`sensor_msgs.msg.CameraInfo`)
-
-Published Topics:
-* `/aruco_poses` (`geometry_msgs.msg.PoseArray`) - Poses of all detected markers (suitable for rviz visualization)
-* `/aruco_markers` (`ros2_aruco_interfaces.msg.ArucoMarkers`) - Provides an array of all poses along with the corresponding marker id
-
-Parameters:
-* `marker_size` - size of the markers in meters (default .0625)
-* `aruco_dictionary_id` - dictionary that was used to generate markers (default `DICT_5X5_250`)
-* `image_topic` - image topic to subscribe to (default `/camera/image_raw`)
-* `camera_info_topic` - Camera info topic to subscribe to (default `/camera/camera_info`)
-* `camera_frame` - Camera optical frame to use (default to the frame id provided by the camera info message.)
+| **Category**        | **Name/Topic**                  | **Type/Description**                                                                          |
+|----------------------|---------------------------------|----------------------------------------------------------------------------------------------|
+| **Subscriptions**   | `/camera/image_raw`            | `sensor_msgs.msg.Image`                                                                     |
+|                      | `/camera/camera_info`         | `sensor_msgs.msg.CameraInfo`                                                                |
+| **Published Topics** | `/aruco_poses`                | `geometry_msgs.msg.PoseArray` - Poses of all detected markers (suitable for rviz visualization) |
+|                      | `/aruco_markers`              | `ros2_aruco_interfaces.msg.ArucoMarkers` - Array of all poses with corresponding marker ID  |
+| **Parameters**       | `marker_size`                 | Size of the markers in meters (default: `.0625`)                                            |
+|                      | `aruco_dictionary_id`         | Dictionary used to generate markers (default: `DICT_5X5_250`)                               |
+|                      | `image_topic`                 | Image topic to subscribe to (default: `/camera/image_raw`)                                  |
+|                      | `camera_info_topic`           | Camera info topic to subscribe to (default: `/camera/camera_info`)                         |
+|                      | `camera_frame`                | Camera optical frame to use (default: Frame ID from the camera info message)               |
 
 
 
@@ -51,30 +48,14 @@ This node, integrated with aruco_node.py, is designed to detect a sequence of Ar
 
 
 ### Behavior
-#### Initialization
-Sets up a publisher for annotated images and subscribers for the raw camera feed and ArUco marker detections.
-Initializes a CvBridge for ROS-OpenCV conversions and an image container for processing frames.
+At the very beginning the node sets up a publisher for annotated images and subscribers for the raw camera feed and ArUco marker detections;then it initializes a CvBridge for ROS-OpenCV conversions and an image container for processing frames.
 
-Processing Logic:
-Image Callback: Updates the internal image container with the latest camera frame.
-Aruco Callback:
-Projects 3D marker positions onto the 2D image plane using the camera’s intrinsic parameters.
-Highlights detected markers on the current frame with green circles.
-Tracks the IDs of markers already seen and ensures each is detected and published once.
-After all markers are detected, reorders and processes them sequentially by ID for further display or action.
-Tracking and Visualization:
-
-Initially tracks up to five markers, ensuring each is detected once in any order.
-Once all markers are detected, it processes them in ascending order of their IDs for structured visualization.
-Displays the processed images in a window and publishes them to the specified topic.
-Application
-This node is ideal for tasks requiring structured recognition and ordered processing of ArUco markers, such as:
-
-Sequential marker-based navigation.
-Visual tracking and marker-specific actions.
-Marker identification and logging for robotics applications.
-
-  
+After the initialization process, the implemented logic is the following:
+- the robot rotates, storing the ID of the seen markers and publishing their image as soon as it sees them for the first time;
+- once the markers have been seen at least one time, the list containing the IDs is sorted and the robot looks for them one at a time;
+- when the desired marker is found, a frame containing it is published one more time;
+- once the sorted list is over, i.e. all the markers' images have been published again in the correct order, the program ends. 
+ 
 
 
 
