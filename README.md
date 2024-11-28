@@ -3,7 +3,7 @@
 This repository contains the Vision Package for the first assignment of the Experimental Robotics Laboratory Course at the Robotics Engineering Master Course of Genoa.
 The authors are:
 - Valentina Condorelli, 4945679;
-- Annika Delucchi, 49759849;
+- Annika Delucchi, 4975984;
 - Ramona Ferrari, 4944096;
 - Daniele Rialdi, 4964038.
 
