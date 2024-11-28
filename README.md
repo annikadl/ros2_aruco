@@ -65,9 +65,3 @@ After the initialization process, the implemented logic follows these steps.
 3. Once the markers have been seen at least one time, the list containing the IDs is sorted to plan how to publish their image in the correct order. To switch to this modality, in which the robot looks for a desired marker at a time, the boolean flag `first_sight` is used.
 4. When the desired marker is found, a frame containing it is published one more time on the custom topic `detected_marker_image_topic`.
 5. Once the sorted list is over, all the markers' images have been published again in the correct order, so the program ends. 
- 
-                 DICT_5X5_1000, DICT_5X5_250, DICT_5X5_50, DICT_6X6_100,
-                 DICT_6X6_1000, DICT_6X6_250, DICT_6X6_50, DICT_7X7_100,
-                 DICT_7X7_1000, DICT_7X7_250, DICT_7X7_50, DICT_ARUCO_ORIGINAL
-                 (default: DICT_5X5_250)
-```
