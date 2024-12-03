@@ -150,9 +150,9 @@ class VisionNode(Node):
 
                     # if the next marker id is the one I was looking for, remove it from the list and publish the image
                     if seen_ids[0] == marker_id:
-                        seen_ids.pop(0)
                         self.get_logger().info(f"I'm looking for marker {seen_ids[0]} but I see marker {marker_id}")
                         self.get_logger().info(f"Published an image with detected marker id {marker_id}")
+                        seen_ids.pop(0)
                         cv2.imshow('Detected ArUco Marker', current_frame)
                         cv2.waitKey(7)
 
