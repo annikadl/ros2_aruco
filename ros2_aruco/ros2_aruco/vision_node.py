@@ -146,11 +146,11 @@ class VisionNode(Node):
                 
                 # if seen_ids is not empty, retrieve the next marker id 
                 if seen_ids != []:
-                    self.get_logger().info(f"The next marker is: {seen_ids[i]}")
+                    self.get_logger().info(f"The next marker is: {seen_ids[0]}")
 
                     # if the next marker id is the one I was looking for, remove it from the list and publish the image
                     if seen_ids[0] == marker_id:
-                        self.get_logger().info(f"I'm looking for marker {seen_ids[0]} but I see marker {marker_id}")
+                        #self.get_logger().info(f"I'm looking for marker {seen_ids[0]} but I see marker {marker_id}")
                         self.get_logger().info(f"Published an image with detected marker id {marker_id}")
                         seen_ids.pop(0)
                         cv2.imshow('Detected ArUco Marker', current_frame)
