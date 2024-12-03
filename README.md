@@ -49,7 +49,7 @@ ros2 run robot_urdf robot_controller_node
 
 In both cases, the robot can be stopped anytime by pressing `q`. The node will not be killed but just paused, so that it can be restarted by pressing `r`.
 
-As or the vision part, two nodes need to be launched:
+As for the vision part, two nodes need to be launched:
 - `aruco_node`, part of the `ros2_aruco` package
 - `vision_node`, the node we developed
 
