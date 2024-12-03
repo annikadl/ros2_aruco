@@ -26,6 +26,41 @@ This package depends on a recent version of OpenCV Python bindings:
 pip install opencv-contrib-python # or pip3
 ```
 ### Commands
+First of all, the simulation must be started with the following command, in a terminal:
+```
+ros2 launch robot_urdf gazebo_aruco.launch.py
+```
+Then, there are two types of nodes that need to be launched:
+- control nodes (check the `ros2` branch of our [robot control repo](https://github.com/danielerialdi/robot_urdf.git))
+- vision nodes
+
+With the control nodes, there are two possibilities to make the robot move:
+ 1. Make the robot rotate
+ 2. Make the camera rotate
+
+In the first case, the following command must be launched in a terminal:
+```
+ros2 run robot_urdf camera_controller_node
+```
+In the second case:
+```
+ros2 run robot_urdf robot_controller_node
+```
+
+In both cases, the robot can be stopped anytime by pressing `q`. The node will not be killed but just paused, so that it can be restarted by pressing `r`.
+
+As or the vision part, two nodes need to be launched:
+- `aruco_node`, part of the `ros2_aruco` package
+- `vision_node`, the node we developed
+
+Therefore, the following commands must be run in two different terminals:
+```
+ros2 run ros2_aruco aruco_node --ros-args --remap /image:=/robot/camera1/image_raw
+```
+and
+```
+ros2 run ros2_aruco vision_node
+```
 
 ## Already existing nodes
 The implemented routine for detecting and sorting the markers relies on the behaviour of the already implemented `aruco_node.py`, which locates Aruco AR markers in images and publishes their IDs and poses.
