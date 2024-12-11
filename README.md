@@ -2,10 +2,10 @@
 
 This repository contains the Vision Package for the first assignment of the Experimental Robotics Laboratory Course at the Robotics Engineering Master Course of Genoa.
 The authors are:
-- Valentina Condorelli, 4945679;
-- Annika Delucchi, 4975984;
-- Ramona Ferrari, 4944096;
-- Daniele Rialdi, 4964038.
+- [Valentina Condorelli](https://github.com/Condorr001), 4945679;
+- [Annika Delucchi](https://github.com/annikadl), 4975984;
+- [Ramona Ferrari](https://github.com/ramonaferrarii), 4944096;
+- [Daniele Rialdi](https://github.com/danielerialdi), 4964038.
 
 The package was initially forked by the Professor's repository, to which we added the file `vision_node.py` at the path `ros2_aruco/ros2_aruco/`.
 
